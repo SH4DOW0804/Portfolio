@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produto | ShadowStore</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>ShadowStore</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="checkout.html">Checkout</a>
+        <span class="toggle-carrinho">🛒 Carrinho</span>
+    </nav>
+</header>
+
+<div class="produto-detalhe">
+    <img src="https://via.placeholder.com/400x300" style="width:100%;border-radius:10px;">
+    <h2>Produto Exemplo</h2>
+    <p>Descrição detalhada do produto. Aqui você pode falar sobre as especificações, materiais, etc.</p>
+    <span class="preco">R$ 99,90</span>
+    <button class="btn" onclick="adicionarCarrinho('Produto Exemplo', 99.90)">Adicionar ao Carrinho</button>
+</div>
+
+<div class="carrinho" id="carrinho">
+    <h2>Meu Carrinho</h2>
+    <div id="itensCarrinho"></div>
+    <hr>
+    <p>Total: R$ <span id="total">0.00</span></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

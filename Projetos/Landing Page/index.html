@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landing Page - Produto</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        header {
+            background: linear-gradient(135deg, #ff4d4d, #990000);
+            color: white;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+        }
+
+        header a {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: white;
+            color: #990000;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: 0.3s;
+        }
+
+        header a:hover {
+            background-color: #ffd6d6;
+        }
+
+        .beneficios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 40px 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 60px;
+            margin-bottom: 15px;
+        }
+
+        .preco {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #fff3f3;
+        }
+
+        .preco h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .preco p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .preco a {
+            padding: 15px 30px;
+            background: #ff4d4d;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .preco a:hover {
+            background-color: #cc0000;
+        }
+
+        footer {
+            background-color: #222;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Produto Incrível</h1>
+        <p>Transforme sua rotina com o nosso produto revolucionário!</p>
+        <a href="#preco">Quero Conhecer</a>
+    </header>
+
+    <section class="beneficios">
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" alt="Velocidade">
+            <h3>Alta Velocidade</h3>
+            <p>Nosso produto garante desempenho rápido e eficaz para o seu dia a dia.</p>
+        </div>
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/1828/1828640.png" alt="Qualidade">
+            <h3>Qualidade Premium</h3>
+            <p>Feito com materiais de alta durabilidade e tecnologia de ponta.</p>
+        </div>
+        <div class="card">
+            <img src="https://cdn-icons-png.flaticon.com/512/2910/2910768.png" alt="Garantia">
+            <h3>Garantia Estendida</h3>
+            <p>Tranquilidade para você com até 2 anos de garantia.</p>
+        </div>
+    </section>
+
+    <section class="preco" id="preco">
+        <h2>Adquira Agora</h2>
+        <p>Apenas <strong>R$ 299,90</strong> à vista</p>
+        <a href="#">Comprar Agora</a>
+    </section>
+
+    <footer>
+        &copy; 2025 - Seu Nome | Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>

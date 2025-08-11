@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShadowStore | Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>ShadowStore</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="checkout.html">Checkout</a>
+        <span class="toggle-carrinho">🛒 Carrinho</span>
+    </nav>
+</header>
+
+<div class="container">
+    <div class="produto">
+        <a href="produto.html"><img src="images/headset.png" alt="Produto 1"></a>
+        <h3>HeadSet</h3>
+        <span class="preco">R$ 99,90</span>
+        <button class="btn" onclick="adicionarCarrinho('Produto 1', 99.90)">Adicionar ao Carrinho</button>
+    </div>
+    <div class="produto">
+        <a href="produto.html"><img src="images/teclado-de-computador.png" alt="Produto 2"></a>
+        <h3>Teclado</h3>
+        <span class="preco">R$ 149,90</span>
+        <button class="btn" onclick="adicionarCarrinho('Produto 2', 149.90)">Adicionar ao Carrinho</button>
+    </div>
+    <div class="produto">
+        <a href="produto.html"><img src="images/PRODUTO.png" alt="Produto 3"></a>
+        <h3>Caixa Misteriosa</h3>
+        <span class="preco">R$ 79,90</span>
+        <button class="btn" onclick="adicionarCarrinho('Produto 3', 79.90)">Adicionar ao Carrinho</button>
+    </div>
+</div>
+
+<div class="carrinho" id="carrinho">
+    <h2>Meu Carrinho</h2>
+    <div id="itensCarrinho"></div>
+    <hr>
+    <p>Total: R$ <span id="total">0.00</span></p>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

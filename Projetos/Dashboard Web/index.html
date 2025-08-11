@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Portfólio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f6fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background: #111;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .sidebar a {
+            color: #ccc;
+            text-decoration: none;
+            padding: 10px;
+            display: block;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background: #e63946;
+            color: #fff;
+        }
+
+        /* Main */
+        .main {
+            flex: 1;
+            padding: 20px;
+        }
+        .header {
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+        }
+        .card h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .card p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* Chart */
+        canvas {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>Meu Painel</h2>
+        <a href="#">📊 Visão Geral</a>
+        <a href="#">📁 Projetos</a>
+        <a href="#">📈 Estatísticas</a>
+        <a href="#">⚙️ Configurações</a>
+    </div>
+
+    <div class="main">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <input type="text" placeholder="Pesquisar...">
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Projetos</h3>
+                <p>12 ativos</p>
+            </div>
+            <div class="card">
+                <h3>Clientes</h3>
+                <p>8 no total</p>
+            </div>
+            <div class="card">
+                <h3>Receita</h3>
+                <p>R$ 4.250,00</p>
+            </div>
+            <div class="card">
+                <h3>Horas Trabalhadas</h3>
+                <p>132h este mês</p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top: 20px;">
+            <h3>Progresso dos Projetos</h3>
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('chart');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Projeto A', 'Projeto B', 'Projeto C', 'Projeto D'],
+                datasets: [{
+                    label: 'Progresso (%)',
+                    data: [85, 60, 45, 90],
+                    backgroundColor: '#e63946'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

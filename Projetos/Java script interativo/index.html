@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-br" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Joguinho Evite os Blocos - Portfolio</title>
+  <style>
+    body {
+      margin: 0;
+      background: #121212;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #ff0000;
+      user-select: none;
+      position: relative;
+    }
+    #gameCanvas {
+      background: #1e1e1e;
+      border: 3px solid #ff0000;
+      border-radius: 10px;
+      display: block;
+      box-shadow: 0 0 15px #ff0000aa;
+    }
+    #score {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 24px;
+      text-shadow: 0 0 10px #ff0000cc;
+      font-weight: bold;
+      z-index: 10;
+    }
+    #gameOver {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #ff4444;
+      font-size: 36px;
+      font-weight: bold;
+      text-shadow: 0 0 15px #ff0000dd;
+      display: none;
+      user-select: none;
+      text-align: center;
+      z-index: 20;
+    }
+    #restartBtn {
+      margin-top: 20px;
+      background: #ff0000;
+      border: none;
+      color: #fff;
+      padding: 10px 25px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 10px #ff0000cc;
+      transition: background 0.3s ease;
+    }
+    #restartBtn:hover {
+      background: #cc0000;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="score">Tempo: 0.0s</div>
+  <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+  <div id="gameOver">
+    Game Over!<br />
+    <button id="restartBtn">Reiniciar</button>
+  </div>
+
+<script>
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const scoreDisplay = document.getElementById('score');
+  const gameOverDiv = document.getElementById('gameOver');
+  const restartBtn = document.getElementById('restartBtn');
+
+  const player = {
+    x: canvas.width / 2 - 20,
+    y: canvas.height - 60,
+    width: 40,
+    height: 40,
+    speed: 7,
+    dx: 0
+  };
+
+  const obstacles = [];
+  let obstacleSpeed = 3;
+  let obstacleSpawnInterval = 1500; // ms
+  let lastSpawnTime = 0;
+
+  // Obstáculo especial que se move horizontalmente
+  let specialObstacle = {
+    x: canvas.width / 2 - 25,
+    y: -100,
+    width: 50,
+    height: 20,
+    speedX: 4,
+    active: false
+  };
+
+  let score = 0;
+  let startTime = null;
+  let animationId = null;
+  let gameRunning = true;
+
+  function drawPlayer() {
+    ctx.fillStyle = '#ff0000';
+    ctx.shadowColor = '#ff0000cc';
+    ctx.shadowBlur = 15;
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+    ctx.shadowBlur = 0;
+  }
+
+  function drawObstacle(obs) {
+    ctx.fillStyle = '#111';
+    ctx.shadowColor = '#000';
+    ctx.shadowBlur = 5;
+    ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+    ctx.shadowBlur = 0;
+  }
+
+  function drawSpecialObstacle() {
+    if(!specialObstacle.active) return;
+    ctx.fillStyle = '#ff0000';
+    ctx.shadowColor = '#ff0000cc';
+    ctx.shadowBlur = 15;
+    ctx.fillRect(specialObstacle.x, specialObstacle.y, specialObstacle.width, specialObstacle.height);
+    ctx.shadowBlur = 0;
+  }
+
+  function updatePlayer() {
+    player.x += player.dx;
+
+    // Limites da tela
+    if(player.x < 0) player.x = 0;
+    if(player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+  }
+
+  function spawnObstacle() {
+    // 1 em 5 chances de spawnar o obstáculo especial, se não ativo
+    if(!specialObstacle.active && Math.random() < 0.2) {
+      specialObstacle.y = -50;
+      specialObstacle.active = true;
+      return;
+    }
+
+    const width = Math.random() * 80 + 40;
+    const height = Math.random() * 25 + 20;
+    const x = Math.random() * (canvas.width - width);
+    obstacles.push({ x, y: -height, width, height });
+  }
+
+  function updateObstacles(delta) {
+    // Atualiza obstáculo especial, se ativo
+    if(specialObstacle.active) {
+      specialObstacle.y += obstacleSpeed;
+      specialObstacle.x += specialObstacle.speedX;
+
+      // Inverte direção nas bordas
+      if(specialObstacle.x <= 0 || specialObstacle.x + specialObstacle.width >= canvas.width) {
+        specialObstacle.speedX *= -1;
+      }
+
+      // Saiu da tela, desativa
+      if(specialObstacle.y > canvas.height) {
+        specialObstacle.active = false;
+      }
+    }
+
+    for(let i = obstacles.length - 1; i >= 0; i--) {
+      obstacles[i].y += obstacleSpeed;
+
+      if(obstacles[i].y > canvas.height) {
+        obstacles.splice(i, 1);
+      }
+    }
+  }
+
+  function checkCollision() {
+    // Colisão com obstáculos normais
+    for(const obs of obstacles) {
+      if(
+        player.x < obs.x + obs.width &&
+        player.x + player.width > obs.x &&
+        player.y < obs.y + obs.height &&
+        player.y + player.height > obs.y
+      ) {
+        return true;
+      }
+    }
+
+    // Colisão com obstáculo especial
+    if(specialObstacle.active) {
+      const obs = specialObstacle;
+      if(
+        player.x < obs.x + obs.width &&
+        player.x + player.width > obs.x &&
+        player.y < obs.y + obs.height &&
+        player.y + player.height > obs.y
+      ) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function updateScore(timestamp) {
+    const now = timestamp || performance.now();
+    score = ((now - startTime) / 1000).toFixed(1);
+    scoreDisplay.textContent = `Tempo: ${score}s`;
+  }
+
+  function clearCanvas() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+
+  function gameLoop(timestamp) {
+    if(!startTime) startTime = timestamp;
+    const delta = timestamp - lastSpawnTime;
+
+    clearCanvas();
+    updatePlayer();
+    drawPlayer();
+
+    if(delta > obstacleSpawnInterval) {
+      spawnObstacle();
+      lastSpawnTime = timestamp;
+    }
+
+    updateObstacles(delta);
+    obstacles.forEach(drawObstacle);
+    drawSpecialObstacle();
+
+    updateScore(timestamp);
+
+    if(checkCollision()) {
+      gameOver();
+      return;
+    }
+
+    animationId = requestAnimationFrame(gameLoop);
+  }
+
+  function gameOver() {
+    gameRunning = false;
+    cancelAnimationFrame(animationId);
+    gameOverDiv.style.display = 'block';
+  }
+
+  function restartGame() {
+    obstacles.length = 0;
+    player.x = canvas.width / 2 - player.width / 2;
+    startTime = null;
+    lastSpawnTime = 0;
+    score = 0;
+    gameOverDiv.style.display = 'none';
+    gameRunning = true;
+    animationId = requestAnimationFrame(gameLoop);
+  }
+
+  // Controle do player
+  function keyDown(e) {
+    if(e.key === 'ArrowLeft' || e.key === 'a') {
+      player.dx = -player.speed;
+    } else if(e.key === 'ArrowRight' || e.key === 'd') {
+      player.dx = player.speed;
+    }
+  }
+  function keyUp(e) {
+    if(
+      e.key === 'ArrowLeft' || e.key === 'a' ||
+      e.key === 'ArrowRight' || e.key === 'd'
+    ) {
+      player.dx = 0;
+    }
+  }
+
+  // Eventos
+  window.addEventListener('keydown', keyDown);
+  window.addEventListener('keyup', keyUp);
+  restartBtn.addEventListener('click', restartGame);
+
+  // Começa o jogo
+  animationId = requestAnimationFrame(gameLoop);
+</script>
+
+</body>
+</html>
